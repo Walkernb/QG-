@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的收藏</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $.post("/QGtieba2/followServlet?method=showTz",function(data){
+            if(data!="null") {
+                var obj = JSON.parse(data);
+                for (let i = 0; i < obj.length; i++) {
+                    $("#show").append("<div class='panel panel-default' style='height: 200px;'>\n" +
+                        "<div class='panel-heading' >\n" +
+                        "<a href='#''>"+obj[i].name+"</a>\n" +
+                        "<button type='button' class='navbar-right button' >\n" +
+                        "<a  href='/QGtieba2/followServlet?method=deleteTz&id="+obj[i].id+"'>取消收藏</a>\n" +
+                        "</button>\n" +
+                        "</div>\n" +
+                        "<div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>\n" +
+                        obj[i].texts +
+                        "</div>\n" +
+                        "<span class='col-xs-6'>点赞数："+obj[i].likes+"</span>\n" +
+                        "<span class='col-xs-6'>评论数："+obj[i].number+"</span>\n" +
+                        "</div>");
+                }
+            }else{
+                $("#show").append("<div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>你还没有收藏帖子哟！</div>");
+            }
+        });
+
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../interFace/interface.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >Home</a>
+        </div>
+    </div>
+</nav>
+<div class="container"style="display: block;margin-top: 80px">
+    <div class="page-header" >
+        <h3 id="head">我收藏的帖子</h3>
+    </div>
+    <div id="show">
+        <div class='panel panel-default' style='height: 200px;'>
+            <div class='panel-heading' >
+                <a href='#' >xxx帖子</a>
+                <button type='button' class='navbar-right button' >
+                    <a  href='#'>取消收藏</a>
+                </button>
+            </div>
+            <div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>
+                    xxx内容213
+            </div>
+            <span class='col-xs-6'>点赞数：123</span>
+            <span class='col-xs-6'>评论数：213</span>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

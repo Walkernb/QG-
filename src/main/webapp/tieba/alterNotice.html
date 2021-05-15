@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>修改公告</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .container{
+            width: 300px;
+            height: 230px ;
+            margin: 100px auto;
+            border: #0f0f0f 1px solid;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3>修改公告</h3>
+    <form action="/QGtieba2/tiebaServlet?method=alter" method="post" class="form-inline" role="form" >
+        <div class="form-group">
+            <label for="inputtext"></label>
+            <textarea name="notice" id="inputtext" cols="30" rows="6" required placeholder="请输入新的贴吧公告" minlength="10" maxlength="100"></textarea>
+            <br/>
+            <input type="submit" value="提交" >
+        </div>
+    </form>
+</div>
+</body>
+</html>

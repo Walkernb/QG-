@@ -1,0 +1,115 @@
+<!--展示帖子里的评论-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>帖子</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        //页面加载数据
+        function myfunction(){
+            //显示帖子的相关信息
+            $.post("/QGtieba2/tieziServlet?method=send",function (data){
+                var obj = JSON.parse(data);
+                $("#head").text(obj.name);
+                $("#text").text(obj.texts);
+                $("#likes-number").text("点赞数："+obj.likes);
+                $("#comments-number").text("评论数："+obj.number);
+            });
+            //显示评论
+            $.post("/QGtieba2/commentServlet?method=getBytzId",function (data){
+                if(data!="null"){
+                    var obj = JSON.parse(data);
+                    for(let i=0;i<obj.length;i++){
+                        $("#show").append("<div class='panel panel-default' style='height: 100px;'>\n" +
+                            "<div class='panel-body'>\n" +
+                             obj[i].texts +
+                            "</div>\n" +
+                            "</div>");
+                    }
+                }else{
+                    $("#show").append("<div class='panel panel-default' style='height: 100px;'>\n" +
+                        "<div class='panel-body'>\n" +
+                        "暂无评论，需要发表评论，请按右上角" +
+                        "</div>\n" +
+                        "</div>");
+                }
+            });
+        }
+        //更新点赞数
+        $(document).ready(function (){
+            $("#likes").click(function (){
+                $.ajax({
+                    url:"/QGtieba2/tieziServlet?method=update",                     //请求的路径
+                    type:"get",                 //请求方法
+                    async:true,                 //开启异步处理，默认值是开启
+                    success:function (data){    //回调函数
+                        var obj = JSON.parse(data);
+                        $("#likes-number").text("点赞数："+obj.likes);
+                    }
+                });
+            });
+        });
+        //收藏
+        $(document).ready(function (){
+            $("#follow").click(function (){
+                $.ajax({
+                    url:"/QGtieba2/followServlet?method=followTz",
+                    type: "get",
+                    async: true,
+                    success:function (data){
+                        var obj = JSON.parse(data);
+                        if(obj=="success"){
+                            alert("收藏成功！");
+                        }else{
+                            alert("已收藏！");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body onload="myfunction()">
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="./showTiezi.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >返回上一级</a>
+        </div>
+        <div id="navbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="follow" href="#">收藏</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="likes" href="#">点赞</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="../comments/buildComment.html">发表评论</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container" style="display: block;margin-top: 80px;">
+    <div >
+        <h3 id="head"></h3>
+        <p><h4 id="text"></h4></p>
+        <p>
+            <h5 id="likes-number" class="col-xs-6"></h5>
+            <h5 id="comments-number" class="col-xs-6"></h5>
+        </p>
+    </div>
+    <div id="show" style="margin-top: 70px;">
+        <div class='panel panel-default' style='height: 100px;'>
+             <div class='panel-body'>
+                 xxx评论
+             </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

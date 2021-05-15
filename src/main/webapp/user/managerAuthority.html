@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>管理员权限</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function (){
+            $.post("/QGtieba2/tiebaServlet?method=getByStatus",function (data){
+                if(data=="N"){
+                    alert("你不是管理员！");
+                }else if(data=="null"){
+                    alert("暂无待审核的贴吧！");
+                }else{
+                    var obj = JSON.parse(data);
+                    for(let i=0;i<obj.length;i++){
+                        $("#show").append("<div class='panel panel-default' >\n" +
+                            "<div class='panel-heading'>\n" +
+                            "<span title='贴吧名'>"+obj[i].name+"</span>\n" +
+                            "<button type='button' class='navbar-right button'><a href='/QGtieba2/tiebaServlet?method=agree&id="+obj[i].id+"'>同意创建</a></button>\n" +
+                            "</div>\n" +
+                            "<div class='panel-body' title='贴吧公告'>\n" +
+                            obj[i].notice +
+                            "</div>\n" +
+                            "</div>");
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../interFace/interface.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >Home</a>
+        </div>
+    </div>
+</nav>
+<div class="container"style="display: block;margin-top: 80px">
+    <div class="page-header" >
+        <h3 id="head">贴吧创建申请</h3>
+    </div>
+    <div id="show">
+
+    </div>
+</div>
+</body>
+</html>

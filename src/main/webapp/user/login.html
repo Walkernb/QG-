@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+            margin-bottom: 10px;
+        }
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+        .form-signin .form-control {
+            position: relative;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+        .form-signin input[type="text"] {
+            margin-bottom: 5px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+            margin-bottom: 5px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function (){
+            var date = new Date();
+            $.get("/QGtieba2/UserServlet?method=check",function (data){
+                if(data=="failure") {
+                    alert("用户名或密码错误！");
+                }else{
+                    if(data=="checkCode"){
+                        alert("验证码错误！")
+                    }
+                }
+            })
+            $("#checkCode").attr("src","/QGtieba2/checkCodeServlet?time="+date.getTime());
+        });
+    </script>
+</head>
+<body>
+
+<div class="container">
+
+    <form class="form-signin" action="/QGtieba2/UserServlet?method=login" method="post">
+        <h2 class="form-signin-heading">用户登录</h2>
+        <label for="name" class="sr-only">Email address</label>
+        <input type="text" id="name" class="form-control" name="username" placeholder="请输入用户名" required autofocus maxlength="15">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="请输入密码" required autofocus maxlength="15">
+        <img id="checkCode" src="/QGtieba2/checkCodeServlet" alt="验证码">
+        <label for="inputCode"></label>
+        <input type="text" id="inputCode" name="checkCode" class="form-control" placeholder="请输入验证码" required maxlength="4">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+    </form>
+    <div ><a href="./findback.html" style="color: red;margin-left: 420px;">忘记密码？</a></div>
+
+</div>
+
+</body>
+</html>

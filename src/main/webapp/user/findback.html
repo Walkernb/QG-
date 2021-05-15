@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>找回密码</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #eee;
+        }
+
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-signin .form-signin-heading,
+        .form-signin .checkbox {
+            margin-bottom: 10px;
+        }
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+        .form-signin .form-control {
+            position: relative;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+        .form-signin input[type="text"] {
+            margin-bottom: 5px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+            margin-bottom: 5px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function (){
+            $.get("/QGtieba2/UserServlet?method=check",function (data){
+                if(data=="failure"){
+                    alert("用户名或电话号码错误！");
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<form class="form-signin" action="/QGtieba2/UserServlet?method=find" method="post">
+    <h2 class="form-signin-heading">找回密码</h2>
+    <label for="name" class="sr-only">Email address</label>
+    <input type="text" id="name" class="form-control" name="name" placeholder="请输入用户名" required autofocus maxlength="15">
+    <label for="inputphone" class="sr-only"></label>
+    <input type="text" name="phone" id="inputphone" class="form-control" required maxlength="11" placeholder="请输入你的手机号" autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" name="newPassword" placeholder="请输入新密码" required autofocus maxlength="15">
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
+</form>
+</body>
+</html>

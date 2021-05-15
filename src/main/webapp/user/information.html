@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>用户信息</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        function myfunction(){
+            $.post("/QGtieba2/UserServlet?method=send",function(data){
+               var obj=JSON.parse(data);
+               $("#username").text(obj.username);
+               $("#phone").text(obj.phone);
+               if(obj.photo!="null"){
+                   console.log("obj.photo:   "+obj.photo);
+                   $("#photo").attr("src","../resource/"+obj.photo);
+               }
+            });
+        }
+    </script>
+</head>
+<body onload="myfunction()">
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../interFace/interface.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >Home</a>
+        </div>
+        <div id="navbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="./alterPassword.html">修改密码</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container"style="display: block;margin-top: 80px">
+    <img id="photo" src="../resource/b.jpg" alt="头像" width="150" height="150" class="img-circle" title="头像" style="margin: 10px auto;display: block">
+</div>
+
+<div class="container" >
+    <table class="table">
+        <caption style="text-align: center;font-weight: bold;font-size: large">用户信息</caption>
+        <tbody>
+        <tr>
+            <td>用户名</td>
+            <td id="username">Bangalore</td>
+        </tr>
+        <tr>
+            <td>手机号</td>
+            <td id="phone">Mumbai</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="container" >
+    <p><span style="margin: 5px auto;display: block"><a href="./alterInformation.html" type="button">编辑信息</a></span></p>
+    <p>
+        <form action="/QGtieba2/UserServlet?method=alterPhoto" method="post" enctype="multipart/form-data">
+            <p>修改头像：<input type="file" name="file" title="点击修改头像"></p>
+            <p><input type="submit"></p>
+        </form>
+    </p>
+</div>
+</body>
+</html>

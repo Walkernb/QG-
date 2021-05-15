@@ -1,0 +1,74 @@
+<!--管理某个贴吧下的帖子-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>帖子</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        function myfunction(){
+            // 显示贴吧信息（贴吧名,公告）
+            $.get("/QGtieba2/tiebaServlet?method=send",function(data){
+                var obj = JSON.parse(data);
+                $("#head").text(obj.name);
+                $("#notice").text(obj.notice);
+            });
+
+            // 显示帖子
+            $.post("/QGtieba2/tieziServlet?method=select",function(data){
+                var obj = JSON.parse(data);
+                if(obj!="null"){
+                    for(let i=0;i<obj.length;i++){
+                        $("#show").append("<div class='panel panel-default' >\n" +
+                            "            <div class='panel-heading'>\n" +
+                            "                <span>"+obj[i].name+"</span>\n" +
+                            "                <button type='button' class='navbar-right button' title='点击删除帖子'>\n" +
+                            "                    <a href='/QGtieba2/tieziServlet?method=delete&selector=1&id="+obj[i].id+"'>删除帖子</a>\n" +
+                            "                </button>\n" +
+                            "            </div>\n" +
+                            "            <div class='panel-body'>\n" +obj[i].texts+
+                            "            </div>\n" +
+                            "        </div>");
+                    }
+                }else{
+                    $("#show").append("<div class='panel panel-default' >\n" +
+                        "            <div class='panel-heading'>\n" +
+                        "                <span>暂无帖子</span>\n" +
+                        "            </div>\n" +
+                        "        </div>");
+                }
+            });
+        }
+    </script>
+
+</head>
+<body onload="myfunction()">
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="./manageTieba.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >返回上级</a>
+        </div>
+        <div id="navbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href='./alterNotice.html'>修改公告</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container"style="display: block;margin-top: 80px">
+    <div class="page-header" >
+        <h3 id="head"></h3>
+        <p><h4 id="notice">暂无公告！</h4></p>
+    </div>
+    <div id="show">
+
+    </div>
+</div>
+
+</body>
+</html>

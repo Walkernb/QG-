@@ -1,0 +1,210 @@
+<!--某个贴吧里的帖子-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>贴吧</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+
+    <script>
+        //页面加载的数据
+        function myfunction(){
+            //显示贴吧名和公告
+            $.get("/QGtieba2/tiebaServlet?method=send",function (data){
+                var obj=JSON.parse(data);
+                console.log(obj);
+                $("#head").text(obj.name);
+                $("#notice").text(obj.notice);
+            });
+
+            //显示帖子信息
+            $.post("/QGtieba2/tieziServlet?method=select",function(data){
+               if("null"==data){
+                    $("#show").append("<div class=\"panel-heading\">\n" +
+                        "                <span>贴吧内没有帖子，如需发帖，请按右上角</span>\n" +
+                        "            </div>");
+               }else{
+                   var obj=JSON.parse(data);
+                   for(let i=0;i<obj.length;i++){
+                       $("#show").append("<div class='panel panel-default' style='height: 200px;'>\n" +
+                           "<div class='panel-heading'>\n" +
+                           "<a href='/QGtieba2/tieziServlet?method=reserve&selector=1&id="+obj[i].id+"' title='点击进入帖子'>"+obj[i].name+"</a>\n" +
+                           "</div>\n" +
+                           "<div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>\n"
+                           + obj[i].texts  +
+                           "</div>\n" +
+                           "<span class='col-xs-6'>"+"点赞数："+obj[i].likes +"</span>\n" +
+                           "<span class='col-xs-6'>"+"评论数："+obj[i].number +"</span>\n" +
+                           "</div>");
+                   }
+               }
+            });
+
+            //判断搜索结果
+            $.get("/QGtieba2/tieziServlet?method=checkResult",function (data){
+                if(data=="failure"){
+                    alert("贴吧没有要搜索的帖子！");
+                }
+            });
+        }
+        //关注
+        $(document).ready(function (){
+            $("#follow").click(function (){
+                $.ajax({
+                    url:"/QGtieba2/followServlet?method=followTb",
+                    type:"get",
+                    async:true,
+                    success:function (data){
+                        var obj = JSON.parse(data);
+                        if(obj=="success"){
+                            alert("关注成功！");
+                        }else{
+                            alert("已关注！");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    //排序
+    <script>
+        $(document).ready(function(){
+            $("#t_sort").click(function (){               //按发帖的时间排序，升序排序
+                $("#show").empty();
+                $.ajax({
+                   url:"/QGtieba2/tieziServlet?method=sort&type=time",
+                   type:"post",
+                   async: true,
+                   success:function (data){
+                       if("null"==data){
+                           $("#show").append("<div class=\"panel-heading\">\n" +
+                               "                <span>贴吧内没有帖子，如需发帖，请按右上角</span>\n" +
+                               "            </div>");
+                       }else{
+                           var obj=JSON.parse(data);
+                           for(let i=0;i<obj.length;i++){
+                               $("#show").append("<div class='panel panel-default' style='height: 200px;'>\n" +
+                                   "<div class='panel-heading'>\n" +
+                                   "<a href='/QGtieba2/tieziServlet?method=reserve&selector=1&id="+obj[i].id+"' title='点击进入帖子'>"+obj[i].name+"</a>\n" +
+                                   "</div>\n" +
+                                   "<div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>\n"
+                                   + obj[i].texts  +
+                                   "</div>\n" +
+                                   "<span class='col-xs-6'>"+"点赞数："+obj[i].likes +"</span>\n" +
+                                   "<span class='col-xs-6'>"+"评论数："+obj[i].number +"</span>\n" +
+                                   "</div>");
+                           }
+                       }
+                   }
+                });
+            });
+            $("#c_sort").click(function (){               //按评论数量排序，降序排序
+                $("#show").empty();
+                $.ajax({
+                    url:"/QGtieba2/tieziServlet?method=sort&type=comments",
+                    type:"post",
+                    async: true,
+                    success:function (data){
+                        if("null"==data){
+                            $("#show").append("<div class=\"panel-heading\">\n" +
+                                "                <span>贴吧内没有帖子，如需发帖，请按右上角</span>\n" +
+                                "            </div>");
+                        }else{
+                            var obj=JSON.parse(data);
+                            for(let i=0;i<obj.length;i++){
+                                $("#show").append("<div class='panel panel-default' style='height: 200px;'>\n" +
+                                    "<div class='panel-heading'>\n" +
+                                    "<a href='/QGtieba2/tieziServlet?method=reserve&selector=1&id="+obj[i].id+"' title='点击进入帖子'>"+obj[i].name+"</a>\n" +
+                                    "</div>\n" +
+                                    "<div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>\n"
+                                    + obj[i].texts  +
+                                    "</div>\n" +
+                                    "<span class='col-xs-6'>"+"点赞数："+obj[i].likes +"</span>\n" +
+                                    "<span class='col-xs-6'>"+"评论数："+obj[i].number +"</span>\n" +
+                                    "</div>");
+                            }
+                        }
+                    }
+                });
+            });
+            $("#l_sort").click(function (){                 //按点赞数量排序，降序排序
+                $("#show").empty();
+                $.ajax({
+                    url:"/QGtieba2/tieziServlet?method=sort&type=likes",
+                    type:"post",
+                    async: true,
+                    success:function (data){
+                        if("null"==data){
+                            $("#show").append("<div class=\"panel-heading\">\n" +
+                                "                <span>贴吧内没有帖子，如需发帖，请按右上角</span>\n" +
+                                "            </div>");
+                        }else{
+                            var obj=JSON.parse(data);
+                            for(let i=0;i<obj.length;i++){
+                                $("#show").append("<div class='panel panel-default' style='height: 200px;'>\n" +
+                                    "<div class='panel-heading'>\n" +
+                                    "<a href='/QGtieba2/tieziServlet?method=reserve&selector=1&id="+obj[i].id+"' title='点击进入帖子'>"+obj[i].name+"</a>\n" +
+                                    "</div>\n" +
+                                    "<div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>\n"
+                                    + obj[i].texts  +
+                                    "</div>\n" +
+                                    "<span class='col-xs-6'>"+"点赞数："+obj[i].likes +"</span>\n" +
+                                    "<span class='col-xs-6'>"+"评论数："+obj[i].number +"</span>\n" +
+                                    "</div>");
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+<body onload="myfunction()">
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../interFace/interface.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >Home</a>
+        </div>
+        <div id="navbar">
+            <form class="navbar-form navbar-left" action="/QGtieba2/tieziServlet?method=search" method="post">
+                <div class="form-group">
+                    <input type="text" name="search" class="form-control" placeholder="找帖" required>
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="../tiezi/buildTiezi.html">发帖</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="follow" href="#">关注</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">帖子排序<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="t_sort" href="#">按时间排序</a></li>
+                        <li><a id="c_sort" href="#">按评论数排序</a></li>
+                        <li><a id="l_sort" href="#">按点赞数排序</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container"style="display: block;margin-top: 80px">
+    <div class="page-header" >
+        <h3 id="head"></h3>
+        <p><h4 id="notice"></h4></p>
+    </div>
+    <div id="show">
+
+    </div>
+</div>
+</body>
+</html>

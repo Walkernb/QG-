@@ -1,0 +1,79 @@
+<!--管理评论-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>评论管理</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        //显示帖子的相关信息
+        $.post("/QGtieba2/tieziServlet?method=send",function (data){
+            var obj = JSON.parse(data);
+            $("#head").text(obj.name);
+            $("#text").text(obj.texts);
+            $("#likes-number").text("点赞数："+obj.likes);
+            $("#comments-number").text("评论数："+obj.number);
+        });
+        //显示评论
+        $.post("/QGtieba2/commentServlet?method=getBytzId",function (data){
+            if(data!="null"){
+                var obj = JSON.parse(data);
+                for(let i=0;i<obj.length;i++){
+                    $("#show").append("<div class='panel panel-default' style='height: 150px;'>\n" +
+                        "<div class='panel-body' style='height: 100px;border-bottom: 1px #9c9696 solid'>\n" +
+                        obj[i].texts +
+                        "</div>\n" +
+                        "<div>\n" +
+                        "<button class='btn' title='点击删除评论'>\n" +
+                        "<a href='/QGtieba2/commentServlet?method=delete&id="+obj[i].id+"'>删除评论</a>\n" +
+                        "</button>\n" +
+                        "</div>\n" +
+                        "</div>");
+                }
+            }else{
+                $("#show").append("<div class='panel panel-default' style='height: 100px;'>\n" +
+                    "<div class='panel-body'>\n" +
+                    "暂无评论" +
+                    "</div>\n" +
+                    "</div>");
+            }
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../tiezi/myTiezi.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >返回上一级</a>
+        </div>
+    </div>
+</nav>
+<div class="container" style="display: block;margin-top: 80px;">
+    <div >
+        <h3 id="head"></h3>
+        <p><h4 id="text"></h4></p>
+        <h5 id="likes-number" class="col-xs-6"></h5>
+        <h5 id="comments-number" class="col-xs-6"></h5>
+        </p>
+    </div>
+    <div id="show" style="margin-top: 70px;">
+        <div class='panel panel-default' style='height: 150px;'>
+            <div class='panel-body' style='height: 100px;border-bottom: 1px #9c9696 solid'>
+                   xxx评论
+            </div>
+            <div>
+                 <button class='btn' title='点击删除评论'>
+                    <a href='#'>删除评论</a>
+                 </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

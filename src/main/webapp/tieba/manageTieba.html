@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的贴吧</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        function myfunction(){
+            $.post("/QGtieba2/tiebaServlet?method=myTieba",function (data){
+                $("#show").empty();
+               var obj = JSON.parse(data);
+               for(let i=0;i<obj.length;i++){
+                   $("#show").append("<div class='panel panel-default' >\n" +
+                       "    <div class='panel-heading'>\n" +
+                       "        <a href='/QGtieba2/tiebaServlet?selector=2&method=select&id="+obj[i].id+"' title='点击进入帖吧'>"+obj[i].name+"</a>\n" +
+                       "    </div>\n" +
+                       "    <div class='panel-body' title='贴吧公告'>\n" +obj[i].notice+
+                       "    </div>\n" +
+                       "</div>");
+               }
+            });
+        }
+        $(document).ready(function(){
+            $(".button").click(function (){
+               $.post("/QGtieba2/tiebaServlet?method=delete")
+            });
+        });
+    </script>
+</head>
+<body onload="myfunction()">
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../interFace/interface.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >Home</a>
+        </div>
+    </div>
+</nav>
+<div class="container"style="display: block;margin-top: 80px">
+    <div class="page-header" >
+        <h3 id="head">我的贴吧</h3>
+    </div>
+    <div id="show">
+        <div class='panel panel-default' >
+            <div class='panel-body' title='贴吧公告'>
+                暂无贴吧！
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

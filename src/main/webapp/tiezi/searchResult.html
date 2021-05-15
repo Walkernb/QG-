@@ -1,0 +1,50 @@
+<!--搜索帖子的结果-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>搜索结果</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $.post("/QGtieba2/tieziServlet?method=searchResult",function (data){
+            if(data!="null"){
+                var obj = JSON.parse(data);
+                for(let i=0;i<obj.length;i++){
+                    $("#show").append("<div class='panel panel-default' style='height: 200px;'>\n" +
+                        "<div class='panel-heading'>\n" +
+                        "<a href='/QGtieba2/tieziServlet?method=reserve&selector=1&id="+obj[i].id+"' title='点击进入帖子'>"+obj[i].name+"</a>\n" +
+                        "</div>\n" +
+                        "<div class='panel-body' style='height: 130px;border-bottom: 1px #cac4c4 solid'>\n"
+                        + obj[i].texts  +
+                        "</div>\n" +
+                        "<span class='col-xs-6'>"+"点赞数："+obj[i].likes +"</span>\n" +
+                        "<span class='col-xs-6'>"+"评论数："+obj[i].number +"</span>\n" +
+                        "</div>");
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../interFace/interface.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >Home</a>
+        </div>
+    </div>
+</nav>
+<div class="container"style="display: block;margin-top: 80px">
+    <div class="page-header" >
+        <h3 id="head">搜索结果</h3>
+    </div>
+    <div id="show">
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!--关注的贴吧-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>我的关注</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function (){
+            $.post("/QGtieba2/followServlet?method=showTb",function (data){
+                if(data!="null"){
+                    var obj = JSON.parse(data);
+                    for(let i=0;i<obj.length;i++){
+                        $("#show").append("<div class='panel panel-default'>\n" +
+                            "<div class='panel-heading'>\n" +
+                            "<a href='#' title='点击进入帖吧'>"+obj[i].name+"</a>\n" +
+                            "<button type='button' class='navbar-right button'><a href='/QGtieba2/followServlet?method=deleteTb&id="+obj[i].id+"'>取消关注</a></button>\n" +
+                            "</div>\n" +
+                            "<div class='panel-body' title='贴吧公告'>\n" +
+                            obj[i].notice +
+                            "</div>\n" +
+                            "</div>");
+                    }
+                }else{
+                    $("#show").append("<div class='panel panel-default' >\n" +
+                        "<div class='panel-body' title='贴吧公告'>\n" +
+                        "<h3>你还没有关注任何贴吧哟！</h3>\n" +
+                        "</div>\n" +
+                        "</div>");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="../interFace/interface.html" style="font-size: large; font-weight: bolder; color: #0f0f0f" >Home</a>
+        </div>
+    </div>
+</nav>
+<div class="container"style="display: block;margin-top: 80px">
+    <div class="page-header" >
+        <h3 id="head">关注的贴吧</h3>
+    </div>
+    <div id="show">
+        <div class='panel panel-default'>
+
+    </div>
+</div>
+
+</body>
+</html>

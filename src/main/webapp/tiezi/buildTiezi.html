@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>写帖</title>
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <style>
+        .form-inline{
+            width: 500px; height: 300px; display: block;/*border: 1px black solid;*/margin: 100px auto
+        }
+    </style>
+</head>
+<body>
+
+<form action="/QGtieba2/tieziServlet?method=build" method="post" class="form-inline" role="form" >
+    <span ><h2>写帖</h2></span>
+    <div class="form-group">
+        <form action="/QGtieba2/tieziServlet?method=build" method="post" class="form-inline" role="form">
+        <p>
+            <label class="sr-only" for="inputname">名称</label>
+            <span>帖名：</span>
+            <input type="text" name="tzname" class="form-control" id="inputname" placeholder="请输入名称" maxlength="20" size="35" required>
+        </p>
+        <p style="margin: 0px 0px 10px 0px;display: block">
+            <label for="inputtexts" class="sr-only">内容</label>
+            <span>内容：&nbsp;</span>
+            <textarea name="text" id="inputtexts" cols="40" rows="4" placeholder="请输入内容，至少20个字,最多150个字" minlength="20" maxlength="150" required style="position: absolute"></textarea>
+        </p>
+        <p style="display: block;margin: 80px 0px 0px 0px">
+            <button type="submit" class="btn" style="margin: 0px auto;display: block;width: 80px">确定</button>
+        </p>
+        </form>
+    </div>
+</form>
+</body>
+</html>

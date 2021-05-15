@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QG贴吧</title>
+    <link rel="stylesheet" href="interfaceCss.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../bootstrap/js/jquery-3.6.0.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        function myfunction(){
+            //欢迎登陆
+            $.get("/QGtieba2/UserServlet?method=send",function (data){
+                var obj=JSON.parse(data);
+                $("#head").text(obj.username+"用户，欢迎你！");
+            });
+
+            // 显示贴吧的标签
+            $.post("/QGtieba2/tiebaServlet?method=data",function (data){
+                 var obj = JSON.parse(data);
+                 for(let i=0;i<obj.length;i++){
+                     $("#select").append("<li class='list-group-item' ><a href='/QGtieba2/tiebaServlet?selector=1&method=select&id=" + obj[i].id+"'>" + obj[i].name+"</a></li>");
+                 }
+             });
+
+            //检查搜索结果
+            $.get("/QGtieba2/tiebaServlet?method=checkResult",function (data){
+                if(data=="failure"){
+                    alert("没有该贴吧！");
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="myfunction()">
+
+
+<nav class="navbar navbar-default navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-header">
+
+            <a class="navbar-brand" href="#" style="font-size: large; font-weight: bolder; color: #0f0f0f" >QG 贴吧</a>
+        </div>
+
+        <div id="navbar">
+            <form class="navbar-form navbar-left" action="/QGtieba2/tiebaServlet?method=search" method="post">
+                <div class="form-group">
+                    <input type="text" name="search" class="form-control" placeholder="请输入要搜索的贴吧名" required>
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="../tieba/buildtieba.html">创吧</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="../user/information.html">个人信息</a></li>
+                        <li><a href="../tieba/manageTieba.html">我的贴吧</a></li>
+                        <li><a href="../tiezi/myTiezi.html">我的帖子</a></li>
+                        <li><a href="../tieba/followTb.html">我的关注</a></li>
+                        <li><a href="../tiezi/followTz.html">我的收藏</a></li>
+                        <li><a href="../user/managerAuthority.html">管理员权限</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<div class="container" >
+
+    <div class="page-header">
+        <h3 id="head"></h3>
+        <p>贴吧导语</p>
+    </div>
+    <ul  class="list-group" id="select">
+
+    </ul>
+
+</div>
+
+<div class="container" id="show">
+
+</div>
+
+</body>
+</html>
